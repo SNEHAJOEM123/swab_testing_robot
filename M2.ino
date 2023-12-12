@@ -10,7 +10,6 @@
 int PWM_Value= 100;
 volatile long pos=0;
 
-
 // void EncoderData();
 volatile long count = 0;
 ICACHE_RAM_ATTR void EncoderDataA() 
@@ -35,7 +34,7 @@ void InitialCalibration()
   {
   Serial.println("Calibration");
   digitalWrite(RLY,LOW);
-  digitalWrite(DIR,HIGH);
+  digitalWrite(DIR,LOW);
   analogWrite(PWM,PWM_Value);
   }
 }
@@ -76,11 +75,11 @@ void loop()
     if(count<2000)
     {
     digitalWrite(RLY,LOW);
-    digitalWrite(DIR,LOW);
+    digitalWrite(DIR,HIGH);
     analogWrite(PWM,PWM_Value);
     Serial.println("Inside WhileLoop");
     }
-    
+
     analogWrite(PWM,0);
     digitalWrite(RLY,HIGH);
     yield();
