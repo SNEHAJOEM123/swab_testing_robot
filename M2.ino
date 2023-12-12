@@ -5,10 +5,11 @@
 
 #define PWM D2
 #define DIR D1
-
+#define RLY D3
 
 int PWM_Value= 100;
 volatile long pos=0;
+
 
 // void EncoderData();
 volatile long count = 0;
@@ -33,6 +34,7 @@ void InitialCalibration()
   while(Bot_Flag == LOW)
   {
   Serial.println("Calibration");
+  digitalWrite(RLY,LOW);
   digitalWrite(DIR,HIGH);
   analogWrite(PWM,PWM_Value);
   }
@@ -56,6 +58,8 @@ void setup()
   pinMode(LS1, INPUT);
   pinMode(PWM, OUTPUT);
   pinMode(DIR, OUTPUT);
+  pinMode(RLY,OUTPUT);
+  digitalWrite(RLY,HIGH);
   attachInterrupt(digitalPinToInterrupt(ENCA), EncoderDataA, RISING);
   // attachInterrupt(digitalPinToInterrupt(ENCB), EncoderDataB, RISING)
   attachInterrupt(digitalPinToInterrupt(LS1), LimitSwitch, FALLING);
@@ -68,15 +72,17 @@ void loop()
   InitialCalibration();
 
   while(Bot_Flag == HIGH)
-  {
+  { 
     if(count<2000)
     {
+    digitalWrite(RLY,LOW);
     digitalWrite(DIR,LOW);
     analogWrite(PWM,PWM_Value);
     Serial.println("Inside WhileLoop");
     }
-
+    
     analogWrite(PWM,0);
+    digitalWrite(RLY,HIGH);
     yield();
   }
 
